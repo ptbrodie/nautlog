@@ -6,6 +6,10 @@ from manager import MANAGER
 
 
 class Logger(object):
+    """
+    The logger.
+    Implements a threadsafe logger, with transactional capability.
+    """
 
     def __init__(self, priority=1):
         self.priority = priority
@@ -18,6 +22,7 @@ class Logger(object):
             self.queue = MANAGER.getqueue(self.priority)
 
     def log(self, message):
+        """ Log one message to the EventQueue """
         if not self.queue:
             self.init_queue()
         with self.lock:
@@ -25,9 +30,11 @@ class Logger(object):
             self.queue.push(event)
 
     def log_t(self, message):
+        """ Add the given message to the current transaction """
         self.transaction.append(message)
 
     def commit(self):
+        """ Commit the messages in the transaction to the EventQueue """
         with self.lock:
             self.queue = MANAGER.getqueue(self.priority)
             for message in self.transaction:
