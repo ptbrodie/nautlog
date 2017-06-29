@@ -20,6 +20,13 @@ logger.log_t("message 1")     # add messages to transaction with log_t
 logger.log_t("message 2")
 logger.log_t("last message")
 logger.commit()
+
+# log messages on multiple lines
+logger = Logger()
+logger.log_t("nice ")
+logger.log_t("message ")
+logger.log_t("friend")
+logger.commit_whole()    # commits 'nice message friend' as one event
 ```
 
 ## Reading Logs
