@@ -59,7 +59,7 @@ def test_thread_sequence():
     while event:
         next = reader.get()
         if next:
-            assert str(event.timestamp) <= str(next.timestamp)
+            assert str(event.timestamp) >= str(next.timestamp)
         event = next
         next = None
 
