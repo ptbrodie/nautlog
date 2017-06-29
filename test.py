@@ -1,5 +1,5 @@
 from tests import (
-    test_eventqueue,
+    test_eventstack,
     test_io,
     test_logger,
     test_manager,
@@ -10,8 +10,8 @@ from tests import (
 
 def run_tests():
 
-    print "Testing event queues... ",
-    test_eventqueue.run_tests()
+    print "Testing event stacks... ",
+    test_eventstack.run_tests()
     print "OK"
     print "Testing log manager... ",
     test_manager.run_tests()

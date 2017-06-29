@@ -5,10 +5,10 @@ from event import Event
 import settings
 
 
-class QueueIO(object):
+class StackIO(object):
 
     """
-    This class implements utilities for queues
+    This class implements utilities for stacks
     to read and write from files.
     """
 

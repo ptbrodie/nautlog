@@ -1,30 +1,30 @@
 from manager import MANAGER
 
 
-def test_getqueue_new():
-    queue = MANAGER.getqueue(1)
-    assert queue.priority == 1
-    MANAGER.queues = {}
+def test_getstack_new():
+    stack = MANAGER.getstack(1)
+    assert stack.priority == 1
+    MANAGER.stacks = {}
 
 
-def test_getqueue_two():
+def test_getstack_two():
     MANAGER.reset()
-    queue1 = MANAGER.getqueue(1)
-    queue2 = MANAGER.getqueue(2)
-    assert queue1.priority != queue2.priority
-    assert queue2.priority == 2
+    stack1 = MANAGER.getstack(1)
+    stack2 = MANAGER.getstack(2)
+    assert stack1.priority != stack2.priority
+    assert stack2.priority == 2
     MANAGER.reset()
 
 
-def test_getqueue_existing():
+def test_getstack_existing():
     MANAGER.reset()
-    MANAGER.getqueue(1)
-    MANAGER.getqueue(1)
-    MANAGER.getqueue(1)
-    assert len(MANAGER.queues.values()) == 1
+    MANAGER.getstack(1)
+    MANAGER.getstack(1)
+    MANAGER.getstack(1)
+    assert len(MANAGER.stacks.values()) == 1
 
 
 def run_tests():
-    test_getqueue_new()
-    test_getqueue_two()
-    test_getqueue_existing()
+    test_getstack_new()
+    test_getstack_two()
+    test_getstack_existing()

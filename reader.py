@@ -18,20 +18,20 @@ class Reader(object):
         self.lock = Lock()
 
     def get(self):
-        """ Read the most recent event from the appropriate queue. """
+        """ Read the most recent event from the appropriate stack. """
         with self.lock:
-            queue = MANAGER.getqueue(self.priority)
-            if not queue:
-                queue = MANAGER.gettop()
-            return queue.pop() if queue else None
+            stack = MANAGER.getstack(self.priority)
+            if not stack:
+                stack = MANAGER.gettop()
+            return stack.pop() if stack else None
 
     def get_all(self, limit=1):
         """
         Read greedily from the log `limit` number of times by locking access
         """
         with self.lock:
-            queue = MANAGER.gettop()
+            stack = MANAGER.gettop()
             for i in xrange(limit):
-                yield queue.pop()
-                if not queue.has_events():
-                    queue = MANAGER.gettop()
+                yield stack.pop()
+                if not stack.has_events():
+                    stack = MANAGER.gettop()
