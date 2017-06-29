@@ -10,7 +10,7 @@ class EventStack(object):
     This class implements a wrapper for adding, removing, and inspecting events at a given priority.
     """
 
-    def __init__(self, priority, capacity=settings.INMEM_EVENT_STACK_CAPACITY):
+    def __init__(self, priority, capacity=None):
         self.priority = priority
         self.events = []
         self.capacity = capacity
@@ -18,7 +18,11 @@ class EventStack(object):
     def push(self, message):
         """ Add an event to the stack. """
         self.events.append(message)
-        if len(self.events) >= self.capacity:
+
+        capacity = settings.INMEM_EVENT_STACK_CAPACITY
+        if self.capacity:
+            capacity = self.capacity
+        if len(self.events) >= capacity:
             self.flush()
 
     def pop(self):
@@ -30,13 +34,13 @@ class EventStack(object):
             if not self.events:
                 # Nothing found for this stack
                 return None
-        return self.events.pop(len(self.events) - 1)
+        return self.events.pop(-1)
 
     def peek(self):
         """ Look at the most recent event in the stack, but do not remove """
         if not self.events:
             return None
-        return self.events[0]
+        return self.events[-1]
 
     def clear(self):
         """ Clear all messages in the stack """
@@ -47,9 +51,9 @@ class EventStack(object):
         middle = len(self.events) / 2
         first = self.events[:middle]
         last = self.events[middle:]
-        firstpath = StackIO.logfile(self.priority, first[0].timestamp)
+        firstpath = StackIO.logfile(self.priority, first[-1].timestamp)
         StackIO.write(firstpath, first)
-        lastpath = StackIO.logfile(self.priority, last[0].timestamp)
+        lastpath = StackIO.logfile(self.priority, last[-1].timestamp)
         StackIO.write(lastpath, first)
         self.events = []
 

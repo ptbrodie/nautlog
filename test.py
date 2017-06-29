@@ -1,3 +1,8 @@
+import shutil
+import os
+
+from manager import MANAGER
+import settings
 from tests import (
     test_eventstack,
     test_io,
@@ -9,7 +14,9 @@ from tests import (
 
 
 def run_tests():
-
+    MANAGER.reset()
+    if os.path.exists(settings.LOGDIR):
+        shutil.rmtree(settings.LOGDIR)
     print "Testing event stacks... ",
     test_eventstack.run_tests()
     print "OK"

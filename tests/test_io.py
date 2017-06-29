@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from io import StackIO
 from logger import Logger
@@ -7,20 +8,25 @@ import settings
 
 
 def test_flush():
+    remove_log_dir()
     MANAGER.reset()
-    settings.INMEM_EVENT_stack_CAPACITY = 2
+    tmp = settings.INMEM_EVENT_STACK_CAPACITY
+    set_capacity(3)
     lo = Logger()
     lo.log("1")
     lo.log("2")
-    chkpath = StackIO.logfile(lo.stack.priority, lo.stack.events[0].timestamp)
     lo.stack.flush()
-    assert os.path.exists(chkpath)
-    os.remove(chkpath)
+    matches = StackIO.get_matches(1)
+    assert matches
+    remove_log_dir()
+    set_capacity(tmp)
 
 
 def test_fill():
+    remove_log_dir()
     MANAGER.reset()
-    settings.INMEM_EVENT_stack_CAPACITY = 4
+    tmp = settings.INMEM_EVENT_STACK_CAPACITY
+    set_capacity(4)
     lo = Logger()
     lo.log("1")
     lo.log("2")
@@ -29,8 +35,34 @@ def test_fill():
     assert not(lo.stack.events)
     lo.stack.fill()
     assert lo.stack.events
+    remove_log_dir()
+    set_capacity(tmp)
+
+
+def test_log_past_capacity():
+    remove_log_dir()
+    MANAGER.reset()
+    tmp = settings.INMEM_EVENT_STACK_CAPACITY
+    set_capacity(4)
+    lo = Logger()
+    for i in range(10):
+        lo.log("%s" % i)
+    matches = StackIO.get_matches(1)
+    assert matches
+    remove_log_dir()
+    set_capacity(tmp)
+
+
+def set_capacity(capacity):
+    settings.INMEM_EVENT_STACK_CAPACITY = capacity
+
+def remove_log_dir():
+    if os.path.exists(settings.LOGDIR):
+        shutil.rmtree(settings.LOGDIR)
 
 
 def run_tests():
     test_flush()
     test_fill()
+    test_log_past_capacity()
+    remove_log_dir()
