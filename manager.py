@@ -1,3 +1,5 @@
+from threading import Lock
+
 from eventstack import EventStack
 
 
@@ -35,3 +37,6 @@ class LogManager(object):
 
 # Create singleton instance of log manager
 MANAGER = LogManager()
+
+# Create a lock for threads to share
+LOCK = Lock()

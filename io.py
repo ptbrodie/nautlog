@@ -15,7 +15,7 @@ class StackIO(object):
     @staticmethod
     def logfile(priority, timestamp):
         """ Get filename corresponding to the given priority and timestamp """
-        filename = "nautlog_%s_%s.log" % (priority, timestamp)
+        filename = "nautlog_%s_%f.log" % (priority, timestamp)
         return os.path.join(settings.LOGDIR, filename)
 
     @staticmethod
@@ -25,7 +25,7 @@ class StackIO(object):
             os.makedirs(settings.LOGDIR)
         with open(fullpath, "wb") as f:
             for event in events:
-                f.write("%s\n" % event)
+                f.write("%s:\n" % event)
 
     @staticmethod
     def get_matches(priority):

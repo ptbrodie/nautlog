@@ -1,6 +1,4 @@
-from threading import Lock
-
-from manager import MANAGER
+from manager import LOCK, MANAGER
 
 
 class Reader(object):
@@ -15,11 +13,10 @@ class Reader(object):
 
     def __init__(self, priority=None):
         self.priority = priority
-        self.lock = Lock()
 
     def get(self):
         """ Read the most recent event from the appropriate stack. """
-        with self.lock:
+        with LOCK:
             stack = MANAGER.getstack(self.priority)
             if not stack:
                 stack = MANAGER.gettop()
@@ -29,7 +26,7 @@ class Reader(object):
         """
         Read greedily from the log `limit` number of times by locking access
         """
-        with self.lock:
+        with LOCK:
             stack = MANAGER.gettop()
             for i in xrange(limit):
                 yield stack.pop()

@@ -1,5 +1,6 @@
-import shutil
 import os
+import shutil
+import sys
 
 from manager import MANAGER
 import settings
@@ -33,6 +34,7 @@ def run_tests():
     test_io.run_tests()
     print "IT'S WORKING"
     print "Testing (gulp) thread safety... ",
+    sys.stdout.flush()
     test_threadsafe.run_tests()
     print "YES!"
 

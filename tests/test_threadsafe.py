@@ -46,8 +46,8 @@ def test_thread_sequence():
     """
     MANAGER.reset()
     pool = []
-    for i in xrange(4):
-        thread = Thread(target=log_n_times, args=(20,))
+    for i in xrange(50):
+        thread = Thread(target=log_n_times, args=(1000,))
         pool.append(thread)
         thread.start()
 
@@ -59,7 +59,7 @@ def test_thread_sequence():
     while event:
         next = reader.get()
         if next:
-            assert str(event.timestamp) >= str(next.timestamp)
+            assert event.timestamp >= next.timestamp
         event = next
         next = None
 

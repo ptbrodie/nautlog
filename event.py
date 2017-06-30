@@ -18,7 +18,7 @@ class Event(object):
         self.thread = threading.current_thread().name
 
     def __str__(self):
-        return "%s:%s:%s:%s" % (self.timestamp, self.thread, self.priority, self.message)
+        return "%f:%s:%d:%s" % (self.timestamp, self.thread, self.priority, self.message)
 
     @staticmethod
     def from_str(string):

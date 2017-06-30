@@ -54,7 +54,7 @@ class EventStack(object):
         firstpath = StackIO.logfile(self.priority, first[-1].timestamp)
         StackIO.write(firstpath, first)
         lastpath = StackIO.logfile(self.priority, last[-1].timestamp)
-        StackIO.write(lastpath, first)
+        StackIO.write(lastpath, last)
         self.events = []
 
     def fill(self):
@@ -63,9 +63,10 @@ class EventStack(object):
         if not matches:
             return None
         choice = os.path.join(settings.LOGDIR, sorted(matches, reverse=True)[0])
+
         self.events = StackIO.read_events(choice)
         os.remove(choice)
         return self.events
 
     def has_events(self):
-        return len(self.events)
+        return len(self.events) or len(StackIO.get_matches(self.priority))
